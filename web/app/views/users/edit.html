@@ -1,0 +1,34 @@
+<div ng-controller="EditUsersController">
+  <h3>New User</h3>
+
+  <div ng-if="errorMessage" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{errorMessage}}
+  </div>
+
+  <form name="users" novalidate>
+    <fieldset ng-disabled="formDisabled">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Overview
+            </div>
+            <div class="panel-body">
+              <users-form item="item"></users-form>
+            </div>
+          </div>
+          <center>
+            <button class="btn btn-success"
+              ng-click="save(users)"
+              scroll-on-click>
+              Save
+            </button>
+            <a href="#/users" class="btn btn-default">Cancel</a>
+          </center>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

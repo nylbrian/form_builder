@@ -1,0 +1,101 @@
+<div class="form-horizontal" ng-form="users">
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="username">Username</label>
+    <div class="col-md-4">
+      <p class="form-control-static" ng-bind="item.properties.username"></p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-4 control-label" for="role">Role</label>
+    <div class="col-md-4">
+      <p class="form-control-static" ng-repeat="i in roles" ng-if="i.id === item.properties.role" ng-bind="i.name"></p>
+    </div>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': users.name.$dirty && users.name.$invalid}">
+    <label class="col-md-4 control-label" for="name">Name</label>
+    <div class="col-md-4">
+      <input type="text"
+        class="form-control"
+        placeholder="Name"
+        ng-model="item.properties.name"
+        id="name"
+        name="name"
+        required />
+      <p class="help-block" ng-show="users.name.$dirty && users.name.$error.required">
+        Name is required.
+      </p>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="item.properties.displayPasswords"
+    ng-class="{'has-error': users.oldPassword.$dirty && users.oldPassword.$invalid}">
+    <label class="col-md-4 control-label" for="oldPassword">Old Password</label>
+    <div class="col-md-4">
+      <input type="password"
+        class="form-control"
+        placeholder="Old Password"
+        ng-model="item.properties.oldPassword"
+        id="oldPassword"
+        name="oldPassword"
+        required />
+      <p class="help-block" ng-show="users.oldPassword.$dirty && users.oldPassword.$error.required">
+        Old Password is required.
+      </p>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="item.properties.displayPasswords"
+    ng-class="{'has-error': users.password.$dirty && users.password.$invalid}">
+    <label class="col-md-4 control-label" for="password">Password</label>
+    <div class="col-md-4">
+      <input type="password"
+        class="form-control"
+        placeholder="Password"
+        ng-model="item.properties.password"
+        id="password"
+        name="password"
+        ng-focus="passwordFocused=true" ng-blur="passwordFocused=false"
+        required />
+      <password-strength ng-if="item.properties.password && passwordFocused"
+        password="item.properties.password">
+      </password-strength>
+      <p class="help-block" ng-show="users.password.$dirty && users.password.$error.required">
+        Password is required.
+      </p>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="item.properties.displayPasswords"
+    ng-class="{'has-error': users.retype.$dirty && users.retype.$invalid}">
+    <label class="col-md-4 control-label" for="retype">Retype Password</label>
+    <div class="col-md-4">
+      <input type="password"
+        class="form-control"
+        placeholder="Retype Password"
+        ng-model="item.properties.retype"
+        id="retype"
+        name="retype"
+        repeat-password="password"
+        required />
+      <p class="help-block" ng-show="users.retype.$dirty && users.retype.$error.required">
+        Please retype the password.
+      </p>
+      <p class="help-block" ng-show="users.retype.$dirty && !users.retype.$error.required &&
+        (users.retype.$error.repeat || users.retype.$error.parse)">
+        Passwords must match.
+      </p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-4"></div>
+    <div class="col-md-2 checkbox" ng-init="item.properties.displayPasswords = false">
+      <label>
+        <input type="checkbox" ng-model="item.properties.displayPasswords" /> Change Password
+      </label>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,16 @@
+<div ng-if="gridOptions && editable" ui-grid="gridOptions" ui-grid-selection ui-grid-edit class="grid dropdown-grid"></div>
+<div ng-if="gridOptions && !editable" ui-grid="gridOptions" class="grid dropdown-grid"></div>
+
+<div ng-if="editable" class="pull-right buttons-control">
+  <button class="btn btn-warning btn-sm" ng-click="addOption()" title="Add a row">
+    <!--<span class="glyphicon glyphicon-plus"></span>-->
+    Add Row
+  </button>
+  <button class="btn btn-danger btn-sm" ng-click="deleteSelected()" title="Remove selected row">
+    <!--<span class="glyphicon glyphicon-remove"></span>-->
+    Remove
+  </button>
+</div>
+<div ng-if="editable" style="margin-top: 10px;">
+  <small><em>* Double click a row to update an entry</em></small>
+</div>

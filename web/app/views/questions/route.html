@@ -1,0 +1,182 @@
+<div class="panel panel-primary" ng-repeat="(key, route) in item.properties.route">
+  <div class="panel-heading">
+    Route
+    <div ng-if="item.properties.route.length > 1"
+      class="btn btn-danger btn-xs pull-right"
+      title="Remove Route">
+      <span class="glyphicon glyphicon-remove" ng-click="item.removeRoute(index)"></span>
+    </div>
+  </div>
+  <accordion close-others="false">
+    <accordion-group heading="General" is-open="true">
+      <div class="form-horizontal">
+        <div class="form-group" >
+          <label class="col-sm-3 control-label" for="label">Next Question</label>
+          <div class="col-sm-8">
+            <select class="form-control" ng-model="route.properties.nextQuestion"
+              ng-options="i.properties.countId as i.properties.name for i in list|filterQuestionList:item">
+              <option value="">-- End of questionnaire --</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group ng-if="!item.properties.display.optional" heading="Answer Conditions" is-open="true">
+      <table class="table table-bordered" ng-if="route.properties.list.length > 0" >
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Condition</th>
+            <th>Value</th>
+            <th>Operator</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, conditions) in route.properties.list" ng-form="routeConditions">
+            <td ng-class="{'has-error': routeConditions.question.$dirty && routeConditions.question.$invalid}">
+              <select ng-init="conditions.properties.question = (conditions.properties.question == '') ? item.properties.countId : conditions.properties.question"
+                ng-model="conditions.properties.question"
+                ng-options="i.properties.countId as i.properties.name
+                for i in list"
+                class="form-control"
+                name="question"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <p class="help-block" ng-show="routeConditions.question.$dirty && routeConditions.question.$error.required">
+                Question is required.
+              </p>
+            </td>
+            <td ng-class="{'has-error': routeConditions.answer.$dirty && routeConditions.answer.$invalid}">
+              <select ng-model="conditions.properties.value"
+                ng-options="i.properties.countId as i.properties.name
+                for i in availableAnswers(conditions.properties.question)"
+                class="form-control"
+                name="answer"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <p class="help-block" ng-show="routeConditions.answer.$dirty && routeConditions.answer.$error.required">
+                Answer is required.
+              </p>
+            </td>
+            <td ng-class="{'has-error': routeConditions.condition.$dirty && routeConditions.condition.$invalid}">
+              <select class="form-control" ng-model="conditions.properties.condition"
+                ng-options="i.value as i.name for i in formConditions"
+                name="condition"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <p class="help-block" ng-show="routeConditions.condition.$dirty && routeConditions.condition.$error.required">
+                Condition is required.
+              </p>
+            </td>
+            <td ng-class="{'has-error': routeConditions.conditionValue.$dirty && routeConditions.conditionValue.$invalid}">
+              <input ng-if="conditions.properties.condition &&
+                conditions.properties.condition !== 9 &&
+                conditions.properties.condition !== 10 &&
+                !isDropdown(conditions.properties.question, conditions.properties.value)"
+                ng-model="conditions.properties.conditionValue.id"
+                class="form-control"
+                type="text"
+                name="conditionValue"
+                required/>
+              <select class="form-control"
+                ng-if="isDropdown(conditions.properties.question, conditions.properties.value) &&
+                conditions.properties.condition &&
+                conditions.properties.condition !== 9 &&
+                conditions.properties.condition !== 10"
+                ng-model="conditions.properties.conditionValue"
+                ng-options="i as i.name for i in getAnswerValues(list, conditions.properties.question, conditions.properties.value) track by i.id"
+                name="conditionValue"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <div ng-if="conditions.properties.condition &&
+                conditions.properties.condition === 9 ||
+                conditions.properties.condition === 10">
+                <question-route-values item="conditions.properties.conditionValue.id"
+                  question="conditions.properties.question"
+                  answer="conditions.properties.value"
+                  list="list">
+                </question-route-values>
+                <input type="hidden" ng-model="conditions.properties.conditionValue.id" />
+              </div>
+              <p class="help-block" ng-show="routeConditions.conditionValue.$dirty && routeConditions.conditionValue.$error.required">
+                  Value is required.
+                </p>
+            </td>
+            <td ng-class="{'has-error': routeConditions.operator.$dirty && routeConditions.operator.$invalid}">
+              <select ng-if="!$last" class="form-control" ng-model="conditions.properties.operator"
+                ng-options="i.value as i.name for i in formOperators"
+                name="operator"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <div class="form-control" ng-if="$last">N/A</div>
+              <p class="help-block" ng-show="routeConditions.operator.$dirty && routeConditions.operator.$error.required">
+                Required.
+              </p>
+            </td>
+            <td style="vertical-align: middle; text-align: center;">
+              <a class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-remove" ng-click="route.removeCondition(key)"></span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-sm-3 pull-right">
+        <button class="form-control btn btn-warning pull-right" ng-click="route.addCondition()">Add Conditions</button>
+      </div>
+    </accordion-group>
+    <accordion-group heading="Clear Fields" is-open="true">
+      <table class="table table-bordered" ng-if="route.properties.clear.length > 0" >
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Answer</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, clear) in route.properties.clear" ng-form="routeClear">
+            <td ng-class="{'has-error': routeClear.question.$dirty && routeClear.question.$invalid}">
+              <select class="form-control" ng-model="clear.properties.question"
+                ng-options="i.properties.countId as i.properties.name for i in list|filterQuestionList:item"
+                name="question"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <p class="help-block" ng-show="routeClear.question.$dirty && routeClear.question.$error.required">
+                Question is required.
+              </p>
+            </td>
+            <td ng-class="{'has-error': routeClear.answer.$dirty && routeClear.answer.$invalid}">
+              <select class="form-control" ng-model="clear.properties.answer"
+                ng-options="i.properties.countId as i.properties.name
+                for i in availableAnswers(clear.properties.question)"
+                name="answer"
+                required>
+                <option value="">-- Select One --</option>
+              </select>
+              <p class="help-block" ng-show="routeClear.answer.$dirty && routeClear.answer.$error.required">
+                Answer is required.
+              </p>
+            </td>
+            <td style="vertical-align: middle; text-align: center;">
+              <a class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-remove" ng-click="route.removeClear(key)"></span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-sm-3 pull-right">
+        <button class="form-control btn btn-warning pull-right" ng-click="route.addClear()">Add Clear</button>
+      </div>
+    </accordion-group>
+  </accordion>
+</div>

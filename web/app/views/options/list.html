@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label for="">List</label>
+  <ul class="list-group options-list" ng-if="list.getList().length > 0">
+    <li ng-repeat="item in list.getList() | filter:search"
+      ng-class="{'active': isSelected(item)}"
+      ng-click="setSelected(item)"
+      class="list-group-item">
+      {{item.properties.name}}
+    </li>
+  </ul>
+  <div ng-if="list.getList().length <= 0">
+    No options available. You may add one by clicking the plus icon below.
+  </div>
+  <div class="pull-right">
+    <input ng-show="list.getList().length > 0" type="text" placeholder="Search" ng-model="search">
+    <button class="btn btn-warning btn-sm" ng-click="addItem()">
+      <!--<span class="glyphicon glyphicon-plus"></span>-->
+      New Option
+    </button>
+    <!--<button class="btn btn-danger btn-xs" ng-click="removeSelected()">
+      <span class="glyphicon glyphicon-remove"></span>
+    </button>-->
+  </div>
+</div>

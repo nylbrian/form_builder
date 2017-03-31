@@ -1,0 +1,22 @@
+<div class="modal-header dialog-header">
+  <button type="button" class="close" ng-click="cancel()">x</button>
+  <h4 class="modal-title">
+    <span class="glyphicon glyphicon-th-list"></span>
+    Option List Manager
+  </h4>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-4">
+      <options-list list="list"></options-list>
+    </div>
+    <div class="col-md-8">
+      <options-form item="list.getSelected()"></options-form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <!--<button class="btn btn-primary" ng-disabled="!canSelect()" ng-click="select()">Select</button>-->
+  <button class="btn btn-success" ng-disabled="!canSave()" ng-click="save()">Save and Select Option</button>
+  <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

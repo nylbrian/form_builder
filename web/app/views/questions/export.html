@@ -1,0 +1,82 @@
+<div ng-controller="CreateQuestionController">
+  <h3>Export Questionaire</h3>
+
+  <div ng-if="errorMessage" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{errorMessage}}
+  </div>
+
+  <fieldset ng-disabled="formDisabled">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="panel panel-primary" ng-if="values.preview">
+          <div class="panel-heading">
+            Preview
+          </div>
+          <div class="panel-body">
+            <pre>{{values.previewObject | prettifyObject}}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            Overview
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="description">Question</label>
+              <ui-select ng-if="questions"
+                ng-model="values.question">
+                <ui-select-match placeholder="Select question">
+                  {{$select.selected.name}}
+                </ui-select-match>
+                <ui-select-choices
+                  repeat="question in questions | filter: $select.search">
+                  {{question.name}}
+                </ui-select-choices>
+              </ui-select>
+              <div ng-if="!questions">
+                <div>
+                  Please create a questionnaire before exporting
+                </div>
+                <div>
+                  <a class="btn btn-warning btn-sm" href="#/questionnaire/create">
+                    Create Questionaire
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Language</label>
+              <ui-select ng-if="languages"
+                ng-model="values.language">
+                <ui-select-match placeholder="Select language">
+                  {{$select.selected.name}}
+                </ui-select-match>
+                <ui-select-choices
+                  repeat="language in languages | filter: $select.search">
+                  {{language.name}}
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="checkbox pull-right">
+              <label>
+                <input type="checkbox" ng-model="values.preview"> Preview
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-success"
+            ng-click="submit()">
+            Submit
+          </button>
+          <a href="#/questionnaire" class="btn btn-default">Cancel</a>
+        </div>
+      </div>
+
+    </div>
+  </fieldset>
+</div>

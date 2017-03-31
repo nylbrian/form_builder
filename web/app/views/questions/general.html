@@ -1,0 +1,150 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Properties
+  </div>
+  <accordion close-others="false">
+    <accordion-group heading="General" is-open="true">
+      <ng-form name="overview">
+        <div class="form-horizontal">
+          <div ng-class="{'has-error': overview.divName.$dirty && overview.divName.$invalid}"
+            class="form-group">
+            <label class="col-sm-3 control-label" for="divName">Div Name</label>
+            <div class="col-sm-8">
+              <input type="text"
+                id="divName"
+                name="divName"
+                class="form-control"
+                ng-model="item.properties.name"
+                ng-blur="item.properties.name = removeSpaces(item.properties.name)"
+                class="form-control"
+                placeholder="Div Name"
+                ng-minlength="5"
+                ng-maxlength="20"
+                required>
+              <p class="help-block" ng-show="overview.divName.$dirty && overview.divName.$error.minlength">
+                Div Name is too short.
+              </p>
+              <p class="help-block" ng-show="overview.divName.$dirty && overview.divName.$error.maxlength">
+                Div Name is too long.
+              </p>
+              <p class="help-block" ng-show="overview.divName.$dirty && overview.divName.$error.required">
+                Div Name is required.
+              </p>
+            </div>
+          </div>
+          <div ng-class="{'has-error': overview.questionId.$dirty && overview.questionId.$invalid}"
+            class="form-group" >
+            <label class="col-sm-3 control-label" for="questionId">Question ID</label>
+            <div class="col-sm-8">
+              <input type="text"
+                id="questionId"
+                name="questionId"
+                class="form-control"
+                ng-model="item.properties.questionId"
+                class="form-control"
+                placeholder="Question ID"
+                ng-minlength="5"
+                ng-maxlength="40"
+                unique-name="{list: list, questionId: item.properties.countId, answerId: null}"
+                ng-blur="item.properties.questionId = removeSpaces(item.properties.questionId)">
+              <p class="help-block" ng-show="overview.questionId.$dirty && overview.questionId.$error.minlength">
+                Question ID is too short.
+              </p>
+              <p class="help-block" ng-show="overview.questionId.$dirty && overview.questionId.$error.maxlength">
+                Question ID is too long.
+              </p>
+              <p class="help-block" ng-show="overview.questionId.$dirty && overview.questionId.$error.unique">
+                An existing question or answer has the same ID.
+              </p>
+            </div>
+          </div>
+          <div class="form-group" >
+            <label class="col-sm-3 control-label" for="label">Options</label>
+            <div class="col-sm-6">
+              <label class="checkbox-inline">
+                <input type="checkbox" ng-model="item.properties.display.hasQuestions" /> Question
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" ng-model="item.properties.display.hasLabels" /> Label
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" ng-model="item.properties.display.optional" /> Optional
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" ng-model="item.properties.display.enabled" /> Enabled
+              </label>
+            </div>
+          </div>
+          <div class="form-group" >
+            <div class="col-sm-7"></div>
+            <div class="col-sm-4">
+              <button class="btn btn-warning" ng-click="item.addRoute()">Add Route</button>
+              <button class="btn btn-warning" ng-click="item.addAnswer()">Add Answer</button>
+            </div>
+          </div>
+        </div>
+      </ng-form>
+    </accordion-group>
+    <accordion-group heading="Questions" is-open="true" ng-if="item.properties.display.hasQuestions">
+      <ng-form name="questions">
+        <div class="form-horizontal">
+          <div ng-repeat="language in languages"
+            ng-class="{'has-error': questions.questionLanguage{{language.id}}.$dirty && questions.questionLanguage{{language.id}}.$invalid}" class="form-group animated fadeIn">
+            <label class="col-sm-3 control-label" for="questionLanguage{{language.id}}">
+              {{language.name}}
+            </label>
+            <div class="col-sm-8">
+              <textarea class="form-control"
+                id="questionLanguage{{language.id}}"
+                name="questionLanguage{{language.id}}"
+                ng-model="item.properties.questions[language.id]"
+                placeholder="{{language.name}}"
+                mentio
+                mentio-trigger-char="'@'"
+                mentio-items="mentionAnswers"
+                mentio-template-url="/question-answer.tpl"
+                mentio-search="searchAnswers(term)"
+                mentio-select="getAnswerText(item)"
+                required>
+              </textarea>
+              {{typedTerm2}}
+              <p class="help-block" ng-show="questions.questionLanguage{{language.id}}.$dirty && questions.questionLanguage{{language.id}}.$error.required">
+                {{language.name}} question is required.
+              </p>
+            </div>
+          </div>
+          <div ng-if="languages.length <= 0">Please select a language on the overview panel</div>
+        </div>
+      </ng-form>
+    </accordion-group>
+    <accordion-group heading="Labels" is-open="true" ng-if="item.properties.display.hasLabels">
+      <ng-form name="labels">
+        <div class="form-horizontal">
+          <div ng-class="{'has-error': labels.labelLanguage{{language.id}}.$dirty && labels.labelLanguage{{language.id}}.$invalid}"
+           class="form-group animated fadeIn" ng-repeat="language in languages">
+            <label class="col-sm-3 control-label" for="labelLanguage{{language.id}}">{{language.name}}</label>
+            <div class="col-sm-8">
+              <textarea class="form-control"
+                id="labelLanguage{{language.id}}"
+                name="labelLanguage{{language.id}}"
+                ng-model="item.properties.labels[language.id]"
+                placeholder="{{language.name}}"
+                mentio
+                mentio-trigger-char="'@'"
+                mentio-items="mentionAnswers"
+                mentio-template-url="/question-answer.tpl"
+                mentio-search="searchAnswers(term)"
+                mentio-select="getAnswerText(item)"
+                required>
+              </textarea>
+              <p class="help-block" ng-show="labels.labelLanguage{{language.id}}.$dirty && labels.labelLanguage{{language.id}}.$error.required">
+                  {{language.name}} label is required.
+                </p>
+            </div>
+          </div>
+          <div ng-if="languages.length <= 0">Please select a language on the overview panel</div>
+        </div>
+      </ng-form>
+    </accordion-group>
+  </accordion>
+</div>

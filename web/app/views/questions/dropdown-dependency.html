@@ -1,0 +1,9 @@
+<p class="animated fadeIn">
+  <label for="" ng-if="!item.properties.option">Option: None selected</label>
+  <questions-dropdown-grid ng-if="item.properties.option"
+    item="item.properties.option" editable="false" languages="languages">
+  </questions-dropdown-grid>
+</p>
+
+<p>Create, assign or modify an option list by clicking the button below:</p>
+<button class="btn btn-warning" ng-click="showOptionManager()">Option List Manager</button>

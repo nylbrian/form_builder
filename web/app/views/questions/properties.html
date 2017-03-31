@@ -1,0 +1,9 @@
+<ng-form name="questions{{item.properties.countId}}">
+  <question-general item="item" languages="languages" list="list"></question-general>
+  <question-answer ng-repeat="(key, answer) in item.properties.answers"
+    item="answer" languages="languages" question="item" list="list" questions="questions" index="key">
+  </question-answer>
+  <question-route ng-if="item.properties.route.length > 0"
+    item="item" list="list" languages="languages">
+  </question-route>
+</ng-form>

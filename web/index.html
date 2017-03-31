@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="formBuilder" lang="en">
+<head>
+  <title ng-bind="title + ' - Form Builder'">Form Builder</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- needed for $locationProvider -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
+  <link rel="stylesheet" href="bower_components/animate.css/animate.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+  <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <!-- bower dependencies -->
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+  <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+  <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script type="text/javascript" src="bower_components/angular-ui-tree/dist/angular-ui-tree.min.js"></script>
+  <script type="text/javascript" src="bower_components/angular-ui-grid/ui-grid.js"></script>
+  <script type="text/javascript" src="bower_components/ui-select/dist/select.js"></script>
+  <script type="text/javascript" src="bower_components/ment.io/dist/mentio.js"></script>
+  <script type="text/javascript" src="bower_components/ment.io/dist/templates.js"></script>
+
+  <!-- app -->
+  <script type="text/javascript" src="app/app.js"></script>
+
+  <!-- controllers -->
+  <script type="text/javascript" src="app/controllers/main.js"></script>
+  <script type="text/javascript" src="app/controllers/login.js"></script>
+  <script type="text/javascript" src="app/controllers/logout.js"></script>
+  <script type="text/javascript" src="app/controllers/settings.js"></script>
+  <script type="text/javascript" src="app/controllers/home.js"></script>
+  <script type="text/javascript" src="app/controllers/questionnaire/view.js"></script>
+  <script type="text/javascript" src="app/controllers/questionnaire/create.js"></script>
+  <script type="text/javascript" src="app/controllers/questionnaire/edit.js"></script>
+  <script type="text/javascript" src="app/controllers/questionnaire/export.js"></script>
+  <script type="text/javascript" src="app/controllers/options/view.js"></script>
+  <script type="text/javascript" src="app/controllers/options/create.js"></script>
+  <script type="text/javascript" src="app/controllers/options/edit.js"></script>
+  <script type="text/javascript" src="app/controllers/users/view.js"></script>
+  <script type="text/javascript" src="app/controllers/users/create.js"></script>
+  <script type="text/javascript" src="app/controllers/users/edit.js"></script>
+
+  <!-- modal controllers -->
+  <script type="text/javascript" src="app/controllers/modal/option-list.js"></script>
+  <script type="text/javascript" src="app/controllers/modal/route-values.js"></script>
+
+  <!-- services -->
+  <script type="text/javascript" src="app/services/password.js"></script>
+  <script type="text/javascript" src="app/services/objects.js"></script>
+  <script type="text/javascript" src="app/services/languages.js"></script>
+  <script type="text/javascript" src="app/services/roles.js"></script>
+  <script type="text/javascript" src="app/services/input.js"></script>
+  <script type="text/javascript" src="app/services/data-type.js"></script>
+  <script type="text/javascript" src="app/services/options.js"></script>
+  <script type="text/javascript" src="app/services/answer-type.js"></script>
+  <script type="text/javascript" src="app/services/answer-value.js"></script>
+  <script type="text/javascript" src="app/services/operator.js"></script>
+  <script type="text/javascript" src="app/services/questions.js"></script>
+  <script type="text/javascript" src="app/services/question-reference.js"></script>
+  <script type="text/javascript" src="app/services/users.js"></script>
+  <script type="text/javascript" src="app/services/string.js"></script>
+  <script type="text/javascript" src="app/services/session.js"></script>
+
+  <!-- factories -->
+  <script type="text/javascript" src="app/factories/questions/form.js"></script>
+  <script type="text/javascript" src="app/factories/questions/item.js"></script>
+  <script type="text/javascript" src="app/factories/questions/answer.js"></script>
+  <script type="text/javascript" src="app/factories/questions/route.js"></script>
+  <script type="text/javascript" src="app/factories/questions/route-list.js"></script>
+  <script type="text/javascript" src="app/factories/questions/route-clear.js"></script>
+  <script type="text/javascript" src="app/factories/questions/list.js"></script>
+  <script type="text/javascript" src="app/factories/questions/dependency.js"></script>
+  <script type="text/javascript" src="app/factories/options/grid.js"></script>
+  <script type="text/javascript" src="app/factories/options/list.js"></script>
+  <script type="text/javascript" src="app/factories/options/item.js"></script>
+  <script type="text/javascript" src="app/factories/users/item.js"></script>
+
+  <!-- directives -->
+  <script type="text/javascript" src="app/directives/navigation.js"></script>
+  <script type="text/javascript" src="app/directives/password-strength.js"></script>
+  <script type="text/javascript" src="app/directives/unique-name.js"></script>
+  <script type="text/javascript" src="app/directives/repeat-password.js"></script>
+  <script type="text/javascript" src="app/directives/scroll-on-click.js"></script>
+  <script type="text/javascript" src="app/directives/select-required.js"></script>
+  <script type="text/javascript" src="app/directives/ui-select-required.js"></script>
+  <script type="text/javascript" src="app/directives/questions/list.js"></script>
+  <script type="text/javascript" src="app/directives/questions/answer.js"></script>
+  <script type="text/javascript" src="app/directives/questions/general.js"></script>
+  <script type="text/javascript" src="app/directives/questions/properties.js"></script>
+  <script type="text/javascript" src="app/directives/questions/dropdown.js"></script>
+  <script type="text/javascript" src="app/directives/questions/dropdown-grid.js"></script>
+  <script type="text/javascript" src="app/directives/questions/overview.js"></script>
+  <script type="text/javascript" src="app/directives/questions/route.js"></script>
+  <script type="text/javascript" src="app/directives/questions/route-values.js"></script>
+  <script type="text/javascript" src="app/directives/questions/dependency.js"></script>
+  <script type="text/javascript" src="app/directives/questions/dropdown-dependency.js"></script>
+  <script type="text/javascript" src="app/directives/questions/grid-dependency.js"></script>
+  <script type="text/javascript" src="app/directives/options/overview.js"></script>
+  <script type="text/javascript" src="app/directives/options/list.js"></script>
+  <script type="text/javascript" src="app/directives/options/form.js"></script>
+  <script type="text/javascript" src="app/directives/options/grid.js"></script>
+  <script type="text/javascript" src="app/directives/users/form.js"></script>
+  <script type="text/javascript" src="app/directives/settings/form.js"></script>
+
+  <!-- filters -->
+  <script type="text/javascript" src="app/filters/question-title.js"></script>
+  <script type="text/javascript" src="app/filters/prettify-object.js"></script>
+  <script type="text/javascript" src="app/filters/filter-question-list.js"></script>
+  <script type="text/javascript" src="app/filters/griddropdown.js"></script>
+
+</head>
+
+<body ng-controller="MainController">
+  <div ng-if="loaded">
+    <navigation></navigation>
+    <div class="container theme-showcase" role="main" ng-view="" autoscroll="true"></div>
+  </div>
+  <script type="text/ng-template" id="/question-answer.tpl">
+    <ul class="list-group user-search">
+      <li mentio-menu-item="person" ng-repeat="person in items" class="list-group-item mention-answer-item">
+        <span class="text-primary" ng-bind-html="person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe"></span>
+      </li>
+    </ul>
+  </script>
+
+</body>
+</html>

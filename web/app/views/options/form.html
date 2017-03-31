@@ -1,0 +1,46 @@
+<div ng-if="isFormDisabled()">
+  Please select an option on the list
+</div>
+<fieldset ng-if="!isFormDisabled()" ng-disabled="isFormDisabled()">
+  <div class="form-group">
+    <label for="">Name</label>
+    <input type="text" class="form-control" id="name" ng-model="item.properties.name" placeholder="Option Name" autofocus>
+  </div>
+  <div class="form-group">
+    <label for="description">Languages</label>
+    <ui-select multiple
+      ng-model="item.properties.languages"
+      on-select="languageUpdated($item)"
+      on-remove="languageUpdated($item)">
+      <ui-select-match placeholder="Select language">
+        {{$item.name}}
+      </ui-select-match>
+      <ui-select-choices
+        repeat="language in languages | filter: $select.search">
+        {{language.name}}
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group">
+    <label for="description">Default Language</label>
+    <div ng-if="item.properties.languages.length <= 0">
+      Please select a supported language for this option
+    </div>
+    <ui-select ng-if="item.properties.languages.length > 0"
+      ng-model="item.properties.defaultLanguage">
+      <ui-select-match placeholder="Select default language">
+        {{$select.selected.name}}
+      </ui-select-match>
+      <ui-select-choices
+        repeat="language in item.properties.languages | filter: $select.search">
+        {{language.name}}
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="form-group">
+    <label for="">Options in list</label>
+    <div ng-if="item.properties.languages.length <= 0">Please select a language</div>
+    <options-grid ng-if="!isFormDisabled() && item.properties.languages.length > 0" item="item" editable="true">
+    </options-grid>
+  </div>
+</fieldset>

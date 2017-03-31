@@ -1,0 +1,13 @@
+<!-- <pre>{{item | prettifyObject }}</pre> -->
+
+<div ng-if="gridOptions" ui-grid="gridOptions" ui-grid-selection ui-grid-edit class="grid dropdown-grid"></div>
+<div class="pull-right buttons-control">
+  <button class="btn btn-warning btn-sm" ng-click="addOption()" title="Add a row">
+    <!--<span class="glyphicon glyphicon-plus"></span>-->
+    Add Row
+  </button>
+  <button class="btn btn-danger btn-sm" ng-click="deleteSelected()" title="Remove selected row">
+    <!--<span class="glyphicon glyphicon-remove"></span>-->
+    Remove
+  </button>
+</div>

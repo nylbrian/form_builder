@@ -1,0 +1,50 @@
+<div ng-controller="CreateOptionsController">
+  <h3>New Option</h3>
+
+  <div ng-if="errorMessage" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{errorMessage}}
+  </div>
+
+  <fieldset ng-disabled="formDisabled">
+    <form name="options" novalidate>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Overview
+            </div>
+            <div class="panel-body">
+              <options-overview item="item"></options-overview>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Data
+            </div>
+            <div class="panel-body">
+              <label for="">Data Grid</label>
+              <div ng-if="item.properties.languages.length <= 0">Please select a language first</div>
+              <options-grid ng-if="!isFormDisabled() && item.properties.languages.length > 0"
+                item="item"
+                editable="true">
+              </options-grid>
+            </div>
+          </div>
+
+          <center>
+            <button class="btn btn-success"
+              ng-click="save(options)"
+              scroll-on-click>
+              Save
+            </button>
+            <a href="#/options" class="btn btn-default">Cancel</a>
+          </center>
+        </div>
+      </div>
+    </form>
+  </fieldset>
+</div>

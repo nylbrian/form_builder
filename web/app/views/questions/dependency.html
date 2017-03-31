@@ -1,0 +1,109 @@
+<accordion-group is-open="true"
+  heading="Answer Dependency"
+  ng-if="item.properties.display.hasDependency"
+  ng-form="dependency">
+  <div class="form-horizontal">
+    <div class="form-group" ng-class="{'has-error': dependency.question.$dirty && dependency.question.$invalid}">
+      <label class="col-sm-3 control-label" for="question">Question</label>
+      <div class="col-sm-8">
+        <select class="form-control"
+          id="question"
+          name="question"
+          ng-model="item.properties.dependency.question"
+          ng-options="i.properties.countId as i.properties.name for i in list|filterQuestionList:question"
+          required>
+          <option value="">-- Select One --</option>
+        </select>
+        <p class="help-block" ng-show="dependency.question.$dirty && dependency.question.$error.required">
+          Question is required.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="form-horizontal">
+    <div class="form-group" ng-class="{'has-error': dependency.answer.$dirty && dependency.answer.$invalid}">
+      <label class="col-sm-3 control-label" for="answer">Answer</label>
+      <div class="col-sm-8">
+        <select class="form-control"
+          id="answer"
+          name="answer"
+          ng-model="item.properties.dependency.answer"
+          ng-options="i.properties.countId as i.properties.name
+          for i in availableAnswers(list, item.properties.dependency.question)"
+          required>
+          <option value="">-- Select One --</option>
+        </select>
+        <p class="help-block" ng-show="dependency.answer.$dirty && dependency.answer.$error.required">
+          Answer is required.
+        </p>
+      </div>
+    </div>
+  </div>
+</accordion-group>
+<accordion-group ng-if="item.properties.dependency.answer !== '' && item.properties.dependency.question !== ''"
+  is-open="true" heading="Dependency Conditions" ng-form="dependencyList">
+  <questions-grid-dependency item="item"
+    languages="languages"
+    list="list"
+    question="question">
+  </questions-grid-dependency>
+
+
+
+
+
+  <!-- <div class="form-horizontal">
+    <div class="form-group" ng-class="{'has-error': dependencyList.source.$dirty && dependencyList.source.$invalid}">
+      <label class="col-sm-3 control-label" for="source">Source</label>
+      <div class="col-sm-8">
+        <select class="form-control"
+          ng-if="getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) === '2' || getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) === '3' || getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) === '6' "
+          ng-model="dependency.properties.source"
+          ng-options="i as i.name for i in getAnswerValues(list, item.properties.dependency.question, item.properties.dependency.answer) track by i.id"
+          id="source"
+          name="source"
+          required>
+          <option value="">-- Select One --</option>
+        </select>
+        <input class="form-control"
+          ng-if="getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) !== '2' && getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) !== '3' && getAnswerType(list, item.properties.dependency.question, item.properties.dependency.answer) !== '6' "
+          ng-model="dependency.properties.source.id"
+          type="text"
+          id="source"
+          name="source"
+          required />
+        <p class="help-block" ng-show="dependencyList.source.$dirty && dependencyList.source.$error.required">
+          Source is required.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="form-horizontal">
+    <div ng-class="{'has-error': dependencyList.answerDep.$dirty && dependencyList.answerDep.$invalid}"
+      class="form-group" >
+      <label class="col-sm-3 control-label" for="answerDep">Answer</label>
+      <div class="col-sm-8">
+        <questions-dropdown-dependency item="dependency" languages="languages"
+          ng-if="(item.properties.type === '2' || item.properties.type === '3' ||
+          item.properties.type === '6')">
+        </questions-dropdown-dependency>
+        <input ng-if="(item.properties.type === '2' || item.properties.type === '3' || item.properties.type === '6')"
+          type="hidden"
+          name="answerDep"
+          ng-model="dependency.properties.answer"
+          required />
+        <input ng-if="(item.properties.type !== '2' && item.properties.type !== '3' &&
+          item.properties.type !== '6')"
+          id="answerDep"
+          name="answerDep"
+          type="text" class="form-control"
+          ng-model="dependency.properties.answer"
+          required />
+        <p class="help-block" ng-show="dependencyList.answerDep.$dirty && dependencyList.answerDep.$error.required">
+          Answer is required.
+        </p>
+      </div>
+    </div>
+  </div> -->
+
+</accordion-group>

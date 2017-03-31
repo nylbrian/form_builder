@@ -1,0 +1,21 @@
+<div ui-tree-handle ng-class="{'active': isSelected(item), 'hasError': hasError(item.properties.countId)}">
+  <a class="btn btn-default btn-xs" data-nodrag ng-click="toggleRow(this)" ng-if="item.children.length > 0">
+    <span class="glyphicon"
+      ng-class="{'glyphicon-chevron-right': collapsed, 'glyphicon-chevron-down': !collapsed}">
+    </span>
+  </a>
+  <span ng-bind="item.properties.name"></span>
+  <a ng-if="list.length > 1" class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeRow(this)">
+    <span class="glyphicon glyphicon-remove"></span>
+  </a>
+  <!--<a class="pull-right btn btn-primary btn-xs"
+    data-nodrag ng-click="newSubItem(this)" style="margin-right: 3px;">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>-->
+</div>
+<ol ui-tree-nodes="options" ng-model="item.children" ng-class="{hidden: collapsed}">
+  <li ng-repeat="item in item.children"
+    ui-tree-node
+    ng-include="'app/views/questions/items-render.html'">
+  </li>
+</ol>

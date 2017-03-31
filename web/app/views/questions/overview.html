@@ -1,0 +1,71 @@
+<div ng-form="overview">
+  <div class="form-group" ng-class="{'has-error': overview.formName.$dirty && overview.formName.$invalid}">
+    <label class="control-label" for="name">Form Name</label>
+    <input ng-model="form.name"
+      type="text"
+      class="form-control"
+      id="formName"
+      placeholder="Form Name"
+      name="formName"
+      ng-minlength="5"
+      ng-maxlength="50"
+      required>
+      <p class="help-block" ng-show="overview.formName.$dirty && overview.formName.$error.minlength">
+        Name is too short.
+      </p>
+      <p class="help-block" ng-show="overview.formName.$dirty && overview.formName.$error.maxlength">
+        Name is too long.
+      </p>
+      <p class="help-block" ng-show="overview.formName.$dirty && overview.formName.$error.required">
+        Name is required.
+      </p>
+  </div>
+  <div class="form-group"
+    ng-class="{'has-error': overview.formDescription.$dirty && overview.formDescription.$invalid}">
+    <label class="control-label" for="description">Description</label>
+    <textarea ng-model="form.description"
+      class="form-control"
+      rows="3"
+      id="formDescription"
+      name="formDescription"
+      placeholder="Description"
+      ng-minlength="10"
+      ng-maxlength="100"
+      required>
+    </textarea>
+    <p class="help-block"
+      ng-show="overview.formDescription.$dirty && overview.formDescription.$error.minlength">
+      Description is too short.
+    </p>
+    <p class="help-block"
+      ng-show="overview.formDescription.$dirty && overview.formDescription.$error.maxlength">
+      Description is too long.
+    </p>
+    <p class="help-block"
+      ng-show="overview.formDescription.$dirty && overview.formDescription.$error.required">
+      Description is required.
+    </p>
+  </div>
+  <div class="form-group"
+    ng-class="{'has-error': overview.formLanguages.$dirty && overview.formLanguages.$invalid}">
+    <label class="control-label" for="formLanguages">Languages</label>
+    <ui-select ui-select-required multiple ng-model="form.languages" id="formLanguages" name="formLanguages">
+      <ui-select-match placeholder="Select language">
+        {{$item.name}}
+      </ui-select-match>
+      <ui-select-choices
+        repeat="language in languages.all | filter: $select.search">
+        {{language.name}}
+      </ui-select-choices>
+    </ui-select>
+    <p class="help-block"
+      ng-show="overview.formLanguages.$dirty && overview.formLanguages.$error.required">
+      You need to select at least one language.
+    </p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="form.enabled"> Enabled
+    </label>
+  </div>
+</div>

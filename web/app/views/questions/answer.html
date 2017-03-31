@@ -1,0 +1,351 @@
+<div class="panel panel-primary" ng-form="answer">
+  <div class="panel-heading">
+    Answer
+    <div ng-if="question.properties.answers.length > 1"
+      class="btn btn-danger btn-xs pull-right"
+      title="Remove Answer">
+      <span class="glyphicon glyphicon-remove" ng-click="question.removeAnswer(index)"></span>
+    </div>
+  </div>
+  <accordion close-others="false">
+    <accordion-group heading="General" is-open="true">
+      <div class="form-horizontal">
+        <div class="form-group" ng-class="{'has-error': answer.answerName.$dirty && answer.answerName.$invalid}">
+          <label class="col-sm-3 control-label" for="answerName">Name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control"
+              ng-model="item.properties.name"
+              class="form-control"
+              name="answerName"
+              id="answerName"
+              placeholder="Name"
+              ng-minlength="3"
+              ng-maxlength="30"
+              ng-blur="item.properties.name = removeSpaces(item.properties.name)"
+              unique-name="{list: list, questionId: question.properties.countId, answerId: item.properties.countId}"
+              required>
+              <p class="help-block" ng-show="answer.answerName.$dirty && answer.answerName.$error.minlength">
+                Name is too short.
+              </p>
+              <p class="help-block" ng-show="answer.answerName.$dirty && answer.answerName.$error.maxlength">
+                Name is too long.
+              </p>
+              <p class="help-block" ng-show="answer.answerName.$dirty && answer.answerName.$error.required">
+                Name is required.
+              </p>
+              <p class="help-block" ng-show="answer.answerName.$dirty && answer.answerName.$error.unique">
+                An existing question or answer has the same ID.
+              </p>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': answer.inputType.$dirty && answer.inputType.$invalid}">
+          <label class="col-sm-3 control-label" for="inputType">Input Type</label>
+          <div class="col-sm-8">
+            <select class="form-control"
+              id="inputType"
+              name="inputType"
+              ng-model="item.properties.type"
+              ng-options="i.id as i.name for i in inputTypes"
+              required>
+              <option value="">-- Select One --</option>
+            </select>
+            <p class="help-block" ng-show="answer.inputType.$dirty && answer.inputType.$error.required">
+              Input Type is required.
+            </p>
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label" for="label">Position</label>
+          <div class="col-sm-8">
+            <select class="form-control" ng-model="item.properties.position">
+              <option value="">-- Select One --</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="top">Top</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': answer.size.$dirty && answer.size.$invalid}">
+          <label class="col-sm-3 control-label" for="size">Size</label>
+          <div class="col-sm-8">
+            <input type="text"
+              id="size"
+              name="size"
+              class="form-control"
+              ng-model="item.properties.size"
+              class="form-control"
+              placeholder="Size">
+              <!-- <p class="help-block" ng-show="answer.size.$dirty && answer.size.$error.number">
+                Size should be numeric.
+              </p> -->
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': answer.dataType.$dirty && answer.dataType.$invalid}">
+          <label class="col-sm-3 control-label" for="dataType">Data Type</label>
+          <div class="col-sm-8">
+            <select ng-model="item.properties.dataType"
+              ng-options="i.id as i.name
+              for i in dataTypes"
+              class="form-control"
+              name="dataType">
+              <option value="">-- Select One --</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label" for="label">Compute</label>
+          <div class="col-sm-8">
+            <select ng-model="item.properties.compute"
+              ng-options="i.properties.countId as i.properties.name
+              for i in availableAnswers(question.properties.countId)"
+              class="form-control"
+              name="answer">
+              <option value="">-- Select One --</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label" for="label">Formula</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control"
+              ng-model="item.properties.formula"
+              mentio
+              mentio-trigger-char="'@'"
+              mentio-items="mentionAnswers"
+              mentio-template-url="/question-answer.tpl"
+              mentio-search="searchAnswersFormula(term, item.properties.countId)"
+              mentio-select="getAnswerText(item)"
+              class="form-control" placeholder="Formula">
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label" for="label">Display</label>
+          <div class="col-sm-8">
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="item.properties.display.hasAttributes" /> Attributes
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="item.properties.display.hasValidation" /> Validation
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="item.properties.display.hasLabels" /> Labels
+            </label>
+            <label class="checkbox-inline" ng-if="item.properties.type === '6' ||
+              item.properties.type === '2' || item.properties.type === '3'">
+              <input type="checkbox" ng-model="item.properties.display.hasDependency" /> Dependency
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" ng-model="item.properties.display.enabled" /> Enabled
+            </label>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <question-dependency
+      ng-if="item.properties.display.hasDependency && questions.isSelectedItem(question.getItem())"
+      item="item" languages="languages" list="list" question="question">
+    </question-dependency>
+    <accordion-group is-open="true" heading="Option List"
+      ng-if="questions.isSelectedItem(question.getItem()) &&
+      !item.properties.display.hasDependency && (item.properties.type === '6' ||
+      item.properties.type === '2' || item.properties.type === '3')">
+      <div class="form-horizontal" ng-form="dropdown">
+        <div class="form-group" ng-class="{'has-error': dropdown.option.$dirty && dropdown.option.$invalid}">
+          <label class="col-sm-3 control-label" for="label">Answer</label>
+          <div class="col-sm-8">
+            <questions-dropdown item="item.properties" languages="languages"></questions-dropdown>
+            <input type="hidden" name="option" ng-model="item.properties.value" required />
+            <p class="help-block" ng-show="dropdown.option.$dirty && dropdown.option.$error.required">
+              Please select an option.
+            </p>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group heading="Attributes" is-open="true" ng-if="item.properties.display.hasAttributes">
+      <div class="form-horizontal">
+        <div ng-repeat="(key, attribute) in item.properties.attributes">
+          <div ng-form="attributes"
+            class="form-group"
+            ng-class="{'has-error': attributes.key.$dirty && attributes.key.$invalid || attributes.value.$dirty && attributes.value.$invalid}">
+            <label class="col-sm-3 control-label" for="key{{key}}">Key</label>
+            <div class="col-sm-3">
+              <input type="text"
+                id="key{{key}}"
+                name="key"
+                class="form-control"
+                ng-model="attribute.key"
+                placeholder="Key"
+                required>
+              <p class="help-block" ng-show="attributes.key.$dirty && attributes.key.$error.required">
+                Key is required
+              </p>
+            </div>
+            <label class="col-sm-1 control-label" for="value{{key}}">Value</label>
+            <div class="col-sm-4">
+              <input type="text"
+                id="value{{key}}"
+                name="value"
+                class="form-control"
+                ng-model="attribute.value"
+                placeholder="Value"
+                required>
+              <p class="help-block" ng-show="attributes.value.$dirty && attributes.value.$error.required">
+                Value is required
+              </p>
+            </div>
+            <div class="col-sm-1">
+              <button class="form-control btn btn-danger btn-xs ">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-8"></label>
+          <div class="col-sm-3">
+            <button class="form-control btn btn-warning pull-right"
+              ng-click="item.addAttribute()">Add Attribute</button>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group heading="Validation" is-open="true" ng-if="item.properties.display.hasValidation">
+      <div class="form-horizontal">
+        <div class="form-group"
+          ng-class="{'has-error': answer.operator.$dirty && answer.operator.$invalid}">
+          <label class="col-sm-3 control-label" for="operator">Operator</label>
+          <div class="col-sm-8">
+            <select class="form-control"
+              id="operator"
+              name="operator"
+              ng-model="item.properties.validation.operator"
+              ng-options="i.value as i.name for i in operators"
+              required>
+              <option value="">-- Select One --</option>
+            </select>
+            <p class="help-block" ng-show="answer.operator.$dirty && answer.operator.$error.required">
+              Operator is required
+            </p>
+          </div>
+        </div>
+        <div class="form-group"
+          ng-class="{'has-error': answer.operatorValue.$dirty && answer.operatorValue.$invalid}">
+          <label class="col-sm-3 control-label" for="operatorValue">Value</label>
+          <div class="col-sm-8">
+            <input ng-if="item.properties.validation.operator !== 9 &&
+              item.properties.validation.operator !== 10 &&
+              !isDropdown(question.properties.countId, item.properties.countId)"
+              ng-model="item.properties.validation.value.id"
+              class="form-control"
+              type="text"
+              name="operatorValue"/>
+            <select class="form-control"
+              ng-if="isDropdown(question.properties.countId, item.properties.countId) &&
+              item.properties.validation.operator !== 9 &&
+              item.properties.validation.operator !== 10"
+              ng-model="item.properties.validation.value"
+              ng-options="i as i.name for i in getAnswerValues(list, question.properties.countId, item.properties.countId) track by i.id"
+              name="operatorValue">
+              <option value="">-- Select One --</option>
+            </select>
+            <div ng-if="item.properties.validation.operator === 9 ||
+              item.properties.validation.operator === 10">
+              <question-route-values item="item.properties.validation.value.id"
+                question="question.properties.countId"
+                answer="item.properties.countId"
+                list="list">
+              </question-route-values>
+              <input type="hidden" ng-model="item.properties.validation.value.id" />
+            </div>
+            <p class="help-block" ng-show="answer.operatorValue.$dirty && answer.operatorValue.$error.required">
+              Value is required
+            </p>
+          </div>
+        </div>
+        <div class="form-group"
+          ng-class="{'has-error': answer.warningId.$dirty && answer.warningId.$invalid}">
+          <label class="col-sm-3 control-label" for="warningId">Warning ID</label>
+          <div class="col-sm-8">
+            <input type="text"
+              id="warningId"
+              name="warningId"
+              class="form-control"
+              placeholder="Warning ID"
+              ng-model="item.properties.validation.warningId"
+              required>
+            <p class="help-block" ng-show="answer.warningId.$dirty && answer.warningId.$error.required">
+              Warning ID is required
+            </p>
+          </div>
+        </div>
+        <div class="form-group"
+          ng-class="{'has-error': answer.warningMessage.$dirty && answer.warningMessage.$invalid}">
+          <label class="col-sm-3 control-label" for="warningMessage">Message</label>
+          <div class="col-sm-8">
+            <input type="text"
+              id="warningMessage"
+              name="warningMessage"
+              class="form-control"
+              placeholder="Warning Message"
+              ng-model="item.properties.validation.warningMessage"
+              required>
+            <p class="help-block" ng-show="answer.warningMessage.$dirty && answer.warningMessage.$error.required">
+              Warning Message is required
+            </p>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group heading="Labels" is-open="true" ng-if="item.properties.display.hasLabels">
+      <div class="form-horizontal">
+        <div ng-if="languages.length <= 0">Please select a language on the overview panel</div>
+        <div ng-if="languages.length > 0">
+          <div class="form-group"
+            ng-class="{'has-error': answer.answerLabelId.$dirty && answer.answerLabelId.$invalid}">
+            <label class="col-sm-3 control-label" for="answerLabelId">Label ID</label>
+            <div class="col-sm-8">
+              <input type="text"
+                id="answerLabelId"
+                name="answerLabelId"
+                class="form-control"
+                ng-model="item.properties.labelId"
+                class="form-control"
+                placeholder="Label ID"
+                required>
+              <p class="help-block" ng-show="answer.answerLabelId.$dirty && answer.answerLabelId.$error.required">
+                Label ID is required
+              </p>
+            </div>
+          </div>
+          <div ng-repeat="language in languages">
+            <div ng-form="answerLabels" class="form-group animated fadeIn"
+              ng-class="{'has-error': answerLabels.answerLabel.$dirty && answerLabels.answerLabel.$invalid}">
+              <label class="col-sm-3 control-label" for="label">{{language.name}}</label>
+              <div class="col-sm-8">
+                <textarea class="form-control"
+                  id="answerLabel{{language.id}}"
+                  name="answerLabel"
+                  ng-model="item.properties.labels[language.id]"
+                  placeholder="{{language.name}}"
+                  mentio
+                  mentio-trigger-char="'@'"
+                  mentio-items="mentionAnswers"
+                  mentio-template-url="/question-answer.tpl"
+                  mentio-search="searchAnswers(term)"
+                  mentio-select="getAnswerText(item)"
+                  required>
+                </textarea>
+                <p class="help-block" ng-show="answerLabels.answerLabel.$dirty && answerLabels.answerLabel.$error.required">
+                  {{language.name}} label is required
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+  </accordion>
+</div>

@@ -1,0 +1,55 @@
+<div ng-controller="CreateQuestionController">
+  <h3>New Questionaire</h3>
+
+  <div ng-if="errorMessage" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{errorMessage}}
+  </div>
+
+  <fieldset ng-disabled="formDisabled">
+    <form name="questionnaire" novalidate>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Overview
+            </div>
+            <div class="panel-body">
+              <questions-overview form="questionForm"></question-overview>
+            </div>
+          </div>
+          <questions-list question-form="questionForm"
+            questions="questionForm.questions"
+            languages="questionForm.languages"
+            question-validator="questionnaire">
+          </questions-list>
+        </div>
+        <div class="col-md-8">
+          <ng-form name="questions">
+            <div ng-repeat="(key, question) in questionForm.questions.list">
+              <ng-form name="question{{question.properties.countId}}">
+                <question-properties
+                  ng-show="questionForm.questions.isSelectedItem(question.getItem())"
+                  languages="questionForm.languages"
+                  item="question"
+                  list="questionForm.questions.list"
+                  questions="questionForm.questions">
+                </question-properties>
+              <ng-form>
+            </div>
+          </ng-form>
+          <center>
+            <button class="btn btn-success"
+              ng-click="save(questionnaire)"
+              scroll-on-click>
+              Save
+            </button>
+            <a href="#/questionnaire" class="btn btn-default">Cancel</a>
+          </center>
+        </div>
+      </div>
+    </form>
+  </fieldset>
+</div>
+

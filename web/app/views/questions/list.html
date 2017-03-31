@@ -1,0 +1,17 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Questions List
+  </div>
+  <div ui-tree="treeOptions">
+    <ol ui-tree-nodes ng-model="list" >
+      <li ng-repeat="item in list"
+        ui-tree-node
+        ng-include="'app/views/questions/items-render.html'">
+      </li>
+    </ol>
+  </div>
+  <div class="panel-footer text-center">
+    <button class="btn btn-default" ng-click="newItem()" scroll-on-click>Add Question</button>
+    <!--<button class="btn btn-default" ng-click="copyItem()">Copy Question</button>-->
+  </div>
+</div>

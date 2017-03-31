@@ -1,0 +1,11 @@
+<div>
+  <form name="inputForm">
+    <input type="hidden" ng-input="COL_FIELD" ng-class="'colt' + col.uid" ui-grid-editor ng-model="MODEL_COL_FIELD">
+    <span ng-if="row.entity.option" ng-bind="row.entity.option.properties.name"></span>
+    <button
+      class="btn btn-xs btn-primary"
+      ng-click="grid.appScope.showOptionManager(grid, row)">
+      Update
+    </button>
+  </form>
+</div>

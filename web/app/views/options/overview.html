@@ -1,0 +1,71 @@
+<div ng-form="overview">
+  <div class="form-group" ng-class="{'has-error': overview.name.$dirty && overview.name.$invalid}">
+    <label class="control-label" for="name">Name</label>
+    <input type="text"
+      class="form-control"
+      id="name"
+      name="name"
+      ng-model="item.properties.name"
+      placeholder="Option Name"
+      ng-minlength="5"
+      ng-maxlength="30"
+      required>
+    <p class="help-block" ng-show="overview.name.$dirty && overview.name.$error.minlength">
+      Name is too short.
+    </p>
+    <p class="help-block" ng-show="overview.name.$dirty && overview.name.$error.maxlength">
+      Name is too long.
+    </p>
+    <p class="help-block" ng-show="overview.name.$dirty && overview.name.$error.required">
+      Name is required.
+    </p>
+  </div>
+  <div class="form-group" ng-class="{'has-error': overview.languages.$dirty && overview.languages.$invalid}">
+    <label class="control-label" for="languages">Languages</label>
+    <ui-select ui-select-required multiple
+      id="languages"
+      name="languages"
+      ng-model="item.properties.languages"
+      on-select="languageUpdated($item)"
+      on-remove="languageUpdated($item)">
+      <ui-select-match placeholder="Select language">
+        {{$item.name}}
+      </ui-select-match>
+      <ui-select-choices
+        repeat="language in languages | filter: $select.search">
+        {{language.name}}
+      </ui-select-choices>
+    </ui-select>
+    <p class="help-block"
+      ng-show="overview.languages.$dirty && overview.languages.$error.required">
+      You need to select at least one language.
+    </p>
+  </div>
+  <div class="form-group" ng-class="{'has-error': (overview.languages.$dirty && overview.languages.$invalid) || (overview.defaultLanguage.$dirty && overview.defaultLanguage.$invalid)}">
+    <label class="control-label" for="defaultLanguage">Default Language</label>
+    <ui-select ng-if="item.properties.languages.length > 0"
+      ng-model="item.properties.defaultLanguage"
+      select-required
+      id="defaultLanguage"
+      name="defaultLanguage">
+      <ui-select-match placeholder="Select default language">
+        {{$select.selected.name}}
+      </ui-select-match>
+      <ui-select-choices
+        repeat="language in item.properties.languages | filter: $select.search">
+        {{language.name}}
+      </ui-select-choices>
+    </ui-select>
+    <p class="help-block" ng-if="item.properties.languages.length <= 0 || (overview.languages.$dirty && overview.languages.$invalid)">
+      Please select a supported language first
+    </p>
+    <p class="help-block" ng-if="overview.defaultLanguage.$dirty && overview.defaultLanguage.$error.required">
+      Default language is required
+    </p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="item.properties.enabled"> Enabled
+    </label>
+  </div>
+</div>
